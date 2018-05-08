@@ -114,7 +114,7 @@ cdef extern from 'libmtp.h':
 		LIBMTP_ERROR_CONNECTING = 7
 	cdef enum:
 		LIBMTP_ERROR_CANCELLED = 8
-	cdef enum LIBMTP_error_number_t:
+	ctypedef enum LIBMTP_error_number_t:
 		LIBMTP_ERROR_NONE = 0
 		LIBMTP_ERROR_GENERAL = 1
 		LIBMTP_ERROR_PTP_LAYER = 2
@@ -142,7 +142,7 @@ cdef extern from 'libmtp.h':
 		LIBMTP_ERROR_CONNECTING = 7
 	cdef enum:
 		LIBMTP_ERROR_CANCELLED = 8
-	cdef enum LIBMTP_error_number_t:
+	ctypedef enum LIBMTP_error_number_t:
 		LIBMTP_ERROR_NONE = 0
 		LIBMTP_ERROR_GENERAL = 1
 		LIBMTP_ERROR_PTP_LAYER = 2
@@ -252,7 +252,7 @@ cdef extern from 'libmtp.h':
 		LIBMTP_ERROR_CONNECTING = 7
 	cdef enum:
 		LIBMTP_ERROR_CANCELLED = 8
-	cdef enum LIBMTP_error_number_t:
+	ctypedef enum LIBMTP_error_number_t:
 		LIBMTP_ERROR_NONE = 0
 		LIBMTP_ERROR_GENERAL = 1
 		LIBMTP_ERROR_PTP_LAYER = 2
@@ -280,7 +280,7 @@ cdef extern from 'libmtp.h':
 		LIBMTP_ERROR_CONNECTING = 7
 	cdef enum:
 		LIBMTP_ERROR_CANCELLED = 8
-	cdef enum LIBMTP_error_number_t:
+	ctypedef enum LIBMTP_error_number_t:
 		LIBMTP_ERROR_NONE = 0
 		LIBMTP_ERROR_GENERAL = 1
 		LIBMTP_ERROR_PTP_LAYER = 2
@@ -440,7 +440,7 @@ cdef extern from 'libmtp.h':
 		LIBMTP_FILETYPE_PLAYLIST = 43
 	cdef enum:
 		LIBMTP_FILETYPE_UNKNOWN = 44
-	cdef enum __LIBMTP_filetype_t:
+	ctypedef enum LIBMTP_filetype_t:
 		LIBMTP_FILETYPE_FOLDER = 0
 		LIBMTP_FILETYPE_WAV = 1
 		LIBMTP_FILETYPE_MP3 = 2
@@ -593,7 +593,7 @@ cdef extern from 'libmtp.h':
 		LIBMTP_FILETYPE_PLAYLIST = 43
 	cdef enum:
 		LIBMTP_FILETYPE_UNKNOWN = 44
-	cdef enum __LIBMTP_filetype_t:
+	ctypedef enum LIBMTP_filetype_t:
 		LIBMTP_FILETYPE_FOLDER = 0
 		LIBMTP_FILETYPE_WAV = 1
 		LIBMTP_FILETYPE_MP3 = 2
@@ -734,7 +734,7 @@ cdef extern from 'libmtp.h':
 		LIBMTP_FILETYPE_PLAYLIST = 43
 	cdef enum:
 		LIBMTP_FILETYPE_UNKNOWN = 44
-	cdef enum __LIBMTP_filetype_t:
+	ctypedef enum LIBMTP_filetype_t:
 		LIBMTP_FILETYPE_FOLDER = 0
 		LIBMTP_FILETYPE_WAV = 1
 		LIBMTP_FILETYPE_MP3 = 2
@@ -922,7 +922,7 @@ cdef extern from 'libmtp.h':
 		LIBMTP_FILETYPE_PLAYLIST = 43
 	cdef enum:
 		LIBMTP_FILETYPE_UNKNOWN = 44
-	cdef enum __LIBMTP_filetype_t:
+	ctypedef enum LIBMTP_filetype_t:
 		LIBMTP_FILETYPE_FOLDER = 0
 		LIBMTP_FILETYPE_WAV = 1
 		LIBMTP_FILETYPE_MP3 = 2
@@ -1062,7 +1062,7 @@ cdef extern from 'libmtp.h':
 		LIBMTP_FILETYPE_PLAYLIST = 43
 	cdef enum:
 		LIBMTP_FILETYPE_UNKNOWN = 44
-	cdef enum __LIBMTP_filetype_t:
+	ctypedef enum LIBMTP_filetype_t:
 		LIBMTP_FILETYPE_FOLDER = 0
 		LIBMTP_FILETYPE_WAV = 1
 		LIBMTP_FILETYPE_MP3 = 2
@@ -2745,7 +2745,7 @@ cdef extern from 'libmtp.h':
 		LIBMTP_ERROR_CONNECTING = 7
 	cdef enum:
 		LIBMTP_ERROR_CANCELLED = 8
-	cdef enum LIBMTP_error_number_t:
+	ctypedef enum LIBMTP_error_number_t:
 		LIBMTP_ERROR_NONE = 0
 		LIBMTP_ERROR_GENERAL = 1
 		LIBMTP_ERROR_PTP_LAYER = 2
@@ -2849,7 +2849,7 @@ cdef extern from 'libmtp.h':
 		LIBMTP_FILETYPE_PLAYLIST = 43
 	cdef enum:
 		LIBMTP_FILETYPE_UNKNOWN = 44
-	cdef enum __LIBMTP_filetype_t:
+	ctypedef enum LIBMTP_filetype_t:
 		LIBMTP_FILETYPE_FOLDER = 0
 		LIBMTP_FILETYPE_WAV = 1
 		LIBMTP_FILETYPE_MP3 = 2
@@ -3003,7 +3003,7 @@ cdef extern from 'libmtp.h':
 		LIBMTP_FILETYPE_PLAYLIST = 43
 	cdef enum:
 		LIBMTP_FILETYPE_UNKNOWN = 44
-	cdef enum __LIBMTP_filetype_t:
+	ctypedef enum LIBMTP_filetype_t:
 		LIBMTP_FILETYPE_FOLDER = 0
 		LIBMTP_FILETYPE_WAV = 1
 		LIBMTP_FILETYPE_MP3 = 2
@@ -3577,7 +3577,7 @@ cdef extern from 'libmtp.h':
 		LIBMTP_ERROR_CONNECTING = 7
 	cdef enum:
 		LIBMTP_ERROR_CANCELLED = 8
-	cdef enum LIBMTP_error_number_t:
+	ctypedef enum LIBMTP_error_number_t:
 		LIBMTP_ERROR_NONE = 0
 		LIBMTP_ERROR_GENERAL = 1
 		LIBMTP_ERROR_PTP_LAYER = 2
@@ -6831,7 +6831,7 @@ cdef extern from 'libmtp.h':
 		LIBMTP_FILETYPE_PLAYLIST = 43
 	cdef enum:
 		LIBMTP_FILETYPE_UNKNOWN = 44
-	cdef enum __LIBMTP_filetype_t:
+	ctypedef enum LIBMTP_filetype_t:
 		LIBMTP_FILETYPE_FOLDER = 0
 		LIBMTP_FILETYPE_WAV = 1
 		LIBMTP_FILETYPE_MP3 = 2
@@ -7477,7 +7477,7 @@ cdef extern from 'libmtp.h':
 		LIBMTP_FILETYPE_PLAYLIST = 43
 	cdef enum:
 		LIBMTP_FILETYPE_UNKNOWN = 44
-	cdef enum __LIBMTP_filetype_t:
+	ctypedef enum LIBMTP_filetype_t:
 		LIBMTP_FILETYPE_FOLDER = 0
 		LIBMTP_FILETYPE_WAV = 1
 		LIBMTP_FILETYPE_MP3 = 2
