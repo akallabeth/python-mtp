@@ -88,6 +88,9 @@ cdef class MediaTransfer(object):
 	'''
 	cdef LIBMTP_mtpdevice_t* device
 	cdef int cached
+	cdef int numrawdevices
+	cdef int currentrawdevice
+	cdef LIBMTP_raw_device_t* rawdevices
 
 	def __cinit__(self, cached=False, ):
 		'''init the object and set LIBMTP_Set_Debug from env
@@ -96,6 +99,9 @@ cdef class MediaTransfer(object):
 			self._set_debug(int(environ['LIBMTP_DEBUG']))
 		self.device = NULL
 		self.cached = bool(cached)
+		self.numrawdevices = 0
+		self.currentrawdevice = 0
+		self.rawdevices = NULL
 
 	cdef void _set_debug(self, int debug):
 		LIBMTP_Set_Debug(int(debug))
@@ -104,28 +110,14 @@ cdef class MediaTransfer(object):
 		'''
 		'''
 		cdef int r = 0
-		cdef LIBMTP_raw_device_t* rawdevices = NULL
 		#cdef LIBMTP_mtpdevice_t* device_list = NULL
-		cdef int numrawdevices = 0
 		if self.device:
 			raise Exception('Already connected')
-		r = LIBMTP_Detect_Raw_Devices(address(rawdevices), address(numrawdevices))
+		r = LIBMTP_Detect_Raw_Devices(address(self.rawdevices), address(self.numrawdevices))
 		if r != 0:
 			raise Exception('LIBMTP_Detect_Raw_Devices error={}'.format(r))
-		if not numrawdevices:
+		if not self.numrawdevices:
 			raise Exception('Zero devices found')
-		if self.cached:
-			self.device = LIBMTP_Open_Raw_Device(rawdevices)
-			# cached alternatives:
-			#self.device = LIBMTP_Get_First_Device()
-			#if LIBMTP_Get_Connected_Devices(&device_list) == 0: self.device = device_list
-		else:
-			self.device = LIBMTP_Open_Raw_Device_Uncached(rawdevices)
-		free(rawdevices)
-		if self.device == NULL:
-			raise Exception('LIBMTP_Open_Raw_Device[_Uncached] failed')
-		LIBMTP_Reset_Device(self.device)
-		LIBMTP_Clear_Errorstack(self.device)
 		return self
 
 	def __exit__(self, exc_type, exc_value, traceback):
@@ -135,7 +127,31 @@ cdef class MediaTransfer(object):
 		if self.device != NULL:
 			LIBMTP_Release_Device(self.device)
 		self.device = NULL
+		free(self.rawdevices)
 		return False
+
+	def has_next(self):
+		if self.currentrawdevice >= self.numrawdevices:
+			return False
+		return True
+
+	def next(self):
+		if self.currentrawdevice >= self.numrawdevices:
+			return None
+		if self.device != NULL:
+			LIBMTP_Release_Device(self.device)
+		if self.cached:
+			self.device = LIBMTP_Open_Raw_Device(address(self.rawdevices[self.currentrawdevice]))
+			# cached alternatives:
+			#self.device = LIBMTP_Get_First_Device()
+			#if LIBMTP_Get_Connected_Devices(&device_list) == 0: self.device = device_list
+		else:
+			self.device = LIBMTP_Open_Raw_Device_Uncached(address(self.rawdevices[self.currentrawdevice]))
+		if self.device == NULL:
+			raise Exception('LIBMTP_Open_Raw_Device[_Uncached] failed')
+		LIBMTP_Reset_Device(self.device)
+		LIBMTP_Clear_Errorstack(self.device)
+		self.currentrawdevice += 1
 
 	cdef LIBMTP_file_t* _cache(self, int storage_id, int parent_id):
 		if not self.cached:
