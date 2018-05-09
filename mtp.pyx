@@ -140,6 +140,7 @@ cdef class MediaTransfer(object):
 			return None
 		if self.device != NULL:
 			LIBMTP_Release_Device(self.device)
+		self.cached = False
 		if self.cached:
 			self.device = LIBMTP_Open_Raw_Device(address(self.rawdevices[self.currentrawdevice]))
 			# cached alternatives:
