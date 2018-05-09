@@ -272,26 +272,37 @@ cdef class MediaTransfer(object):
 			raise Exception('LIBMTP_Create_Folder error={}'.format(r))
 		return r
 
+	cdef get_folder(self, LIBMTP_folder_t* folder, recurse=False):
+		cdef LIBMTP_folder_t* current = folder
+		cdef LIBMTP_folder_t* child
+		
+		folders = []
+		while current != NULL:
+			item = dict(
+						object_id=int(current.folder_id),
+						parent_id=int(current.parent_id),
+						storage_id=int(current.storage_id),
+						name=current.name if current.name != NULL else None,
+						)
+			folders.append(item)
+			if recurse and current.child != NULL:
+				item = self.get_folder(current.child, recurse)
+				folders.extend(item)
+			current = current.sibling
+			
+		return folders
+
 	def get_folders(self, storage_id=0, recurse=False, ):
 		cdef LIBMTP_folder_t* current = NULL
-		cdef LIBMTP_folder_t* tmp = NULL
+	
 		if self.device == NULL:
 			raise Exception('Not connected')
 		self._cache(storage_id, 0)
 		current = LIBMTP_Get_Folder_List_For_Storage(self.device, storage_id)
-		tmp = current
 		try:
-			while current != NULL:
-				yield dict(
-					object_id=int(current.folder_id),
-					parent_id=int(current.parent_id),
-					storage_id=int(current.storage_id),
-					name=current.name if current.name != NULL else None,
-					)
-				#for f in _folder_out(recurse, depth+1, current.child): yield f # TODO
-				current = current.sibling
+			return self.get_folder(current, recurse)
 		finally:
-			LIBMTP_destroy_folder_t(tmp) # LIBMTP_destroy_folder_t is recursive+enumerates!
+			LIBMTP_destroy_folder_t(current) # LIBMTP_destroy_folder_t is recursive+enumerates!
 
 	def get_files(self):
 		cdef LIBMTP_file_t* tmp = NULL
