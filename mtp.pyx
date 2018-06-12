@@ -87,18 +87,17 @@ cdef class MediaTransfer(object):
 	see file:///usr/share/doc/libmtp-doc/html/group__internals.html#LIBMTP_Set_Debug).
 	'''
 	cdef LIBMTP_mtpdevice_t* device
-	cdef int cached
 	cdef int numrawdevices
 	cdef int currentrawdevice
 	cdef LIBMTP_raw_device_t* rawdevices
 
-	def __cinit__(self, cached=False, ):
+	def __cinit__(self, ):
 		'''init the object and set LIBMTP_Set_Debug from env
 		'''
 		if 'LIBMTP_DEBUG' in environ:
 			self._set_debug(int(environ['LIBMTP_DEBUG']))
 		self.device = NULL
-		self.cached = bool(cached)
+		self.cached = {}
 		self.numrawdevices = 0
 		self.currentrawdevice = 0
 		self.rawdevices = NULL
@@ -135,13 +134,12 @@ cdef class MediaTransfer(object):
 			return False
 		return True
 
-	def next(self):
+	def next(self, cached = False):
 		if self.currentrawdevice >= self.numrawdevices:
 			return None
 		if self.device != NULL:
 			LIBMTP_Release_Device(self.device)
-		self.cached = False
-		if self.cached:
+		if cached:
 			self.device = LIBMTP_Open_Raw_Device(address(self.rawdevices[self.currentrawdevice]))
 			# cached alternatives:
 			#self.device = LIBMTP_Get_First_Device()
@@ -155,11 +153,11 @@ cdef class MediaTransfer(object):
 		self.currentrawdevice += 1
 
 	cdef LIBMTP_file_t* _cache(self, int storage_id, int parent_id):
-		if not self.cached:
+		if not self.cached[self.currentrawdevice]:
 			r = LIBMTP_Get_Storage(self.device, LIBMTP_STORAGE_SORTBY_NOTSORTED)
 			if r not in (0, 1, ):
 				raise Exception('LIBMTP_Get_Storage error={}'.format(r))
-			self.cached = True
+			self.cached[self.currentrawdevice] = True
 		return LIBMTP_Get_Files_And_Folders(self.device, storage_id, parent_id)
 
 	def get_errorstack(self):
