@@ -14,7 +14,7 @@ setup(
 	long_description='''
 ''',
 	cmdclass = {'build_ext': build_ext},
-	ext_modules = [Extension('mtp', ['mtp.pyx', ],
+	ext_modules = [Extension('mtp', ['mtp.pyx', 'libmtp.pxd', ],
 		libraries=['mtp', ],
 		include_dirs=['/usr/include', ],
 		extra_compile_args=['-Wno-cast-qual', '-Wno-unused-but-set-variable', ],
