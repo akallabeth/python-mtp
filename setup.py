@@ -9,7 +9,7 @@ from Cython.Distutils import build_ext
 
 setup(
 	name = "mtp",
-	version = "1.0.0",
+	version = "1.0.1",
 	description = "libmtp bindings for Python",
 	long_description='''
 ''',
