@@ -89,6 +89,7 @@ cdef class MediaTransfer(object):
 	cdef LIBMTP_mtpdevice_t* device
 	cdef int numrawdevices
 	cdef int currentrawdevice
+	cdef dict cached
 	cdef LIBMTP_raw_device_t* rawdevices
 
 	def __cinit__(self, ):
@@ -117,6 +118,8 @@ cdef class MediaTransfer(object):
 			raise Exception('LIBMTP_Detect_Raw_Devices error={}'.format(r))
 		if not self.numrawdevices:
 			raise Exception('Zero devices found')
+		for i in range(0, self.numrawdevices):
+			self.cached[i] = False
 		return self
 
 	def __exit__(self, exc_type, exc_value, traceback):
@@ -153,11 +156,11 @@ cdef class MediaTransfer(object):
 		self.currentrawdevice += 1
 
 	cdef LIBMTP_file_t* _cache(self, int storage_id, int parent_id):
-		if not self.cached[self.currentrawdevice]:
+		if not self.cached[self.currentrawdevice-1]:
 			r = LIBMTP_Get_Storage(self.device, LIBMTP_STORAGE_SORTBY_NOTSORTED)
 			if r not in (0, 1, ):
 				raise Exception('LIBMTP_Get_Storage error={}'.format(r))
-			self.cached[self.currentrawdevice] = True
+			self.cached[self.currentrawdevice-1] = True
 		return LIBMTP_Get_Files_And_Folders(self.device, storage_id, parent_id)
 
 	def get_errorstack(self):
