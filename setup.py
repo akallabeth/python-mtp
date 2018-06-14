@@ -6,13 +6,15 @@
 from distutils.core import setup
 from distutils.extension import Extension
 from Cython.Distutils import build_ext
+import platform
 
 setup(
 	name = "mtp",
 	version = "1.0.1",
+	platforms = [platform.machine()],
+	license = 'GPLv3',
 	description = "libmtp bindings for Python",
-	long_description='''
-''',
+	long_description='''libmtp bindings for Python''',
 	cmdclass = {'build_ext': build_ext},
 	ext_modules = [Extension('mtp', ['mtp.pyx', 'libmtp.pxd', ],
 		libraries=['mtp', ],
@@ -22,4 +24,9 @@ setup(
 	author = "M. Dietrich",
 	author_email = "mdt@pyneo.org",
 	url = "http://pyneo.org/python-mtp/",
+	install_requires=[
+		'os',
+		'datetime',
+		'cython'
+	]
 	)
